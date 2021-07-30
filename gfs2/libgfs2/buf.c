@@ -38,6 +38,19 @@ struct gfs2_buffer_head *bget(struct gfs2_sbd *sdp, uint64_t num)
 	return bh;
 }
 
+int __breadm_noupdate(struct gfs2_sbd *sdp, struct gfs2_buffer_head **bhs, size_t n,
+	     uint64_t block, int line, const char *caller)
+{
+	uint64_t b = block;
+	size_t i;
+	for (i = 0; i < n; i++) {
+		bhs[i] = bget(sdp, b++);
+		if (bhs[i] == NULL)
+			return -1;
+	}
+	return 0;
+}
+
 int __breadm(struct gfs2_sbd *sdp, struct gfs2_buffer_head **bhs, size_t n,
 	     uint64_t block, int line, const char *caller)
 {
@@ -71,6 +84,19 @@ int __breadm(struct gfs2_sbd *sdp, struct gfs2_buffer_head **bhs, size_t n,
 	}
 	return 0;
 }
+
+struct gfs2_buffer_head *__bread_noupdate(struct gfs2_sbd *sdp, uint64_t num, int line,
+				 const char *caller)
+{
+	struct gfs2_buffer_head *bh;
+	ssize_t ret;
+
+	bh = bget(sdp, num);
+	if (bh == NULL)
+		return NULL;
+	return NULL;
+}
+			
 
 struct gfs2_buffer_head *__bread(struct gfs2_sbd *sdp, uint64_t num, int line,
 				 const char *caller)

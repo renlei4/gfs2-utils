@@ -349,6 +349,9 @@ extern struct gfs2_buffer_head *bget(struct gfs2_sbd *sdp, uint64_t num);
 extern struct gfs2_buffer_head *__bread(struct gfs2_sbd *sdp, uint64_t num,
 					int line, const char *caller);
 extern int __breadm(struct gfs2_sbd *sdp, struct gfs2_buffer_head **bhs, size_t n, uint64_t block, int line, const char *caller);
+extern struct gfs2_buffer_head *__bread_noupdate(struct gfs2_sbd *sdp, uint64_t num,
+					int line, const char *caller);
+extern int __breadm_noupdate(struct gfs2_sbd *sdp, struct gfs2_buffer_head **bhs, size_t n, uint64_t block, int line, const char *caller);
 extern int bwrite(struct gfs2_buffer_head *bh);
 extern int brelse(struct gfs2_buffer_head *bh);
 extern uint32_t lgfs2_get_block_type(const char *buf);
@@ -356,6 +359,7 @@ extern uint32_t lgfs2_get_block_type(const char *buf);
 #define bmodified(bh) do { bh->b_modified = 1; } while(0)
 
 #define bread(bl, num) __bread(bl, num, __LINE__, __FUNCTION__)
+#define bread_noupdate(bl, num) __bread_noupdate(bl, num, __LINE__, __FUNCTION__)
 #define breadm(bl, bhs, n, block) __breadm(bl, bhs, n, block, __LINE__, __FUNCTION__)
 
 /* config.c */
